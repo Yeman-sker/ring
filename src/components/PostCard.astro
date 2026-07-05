@@ -3,9 +3,10 @@ import type { CollectionEntry } from 'astro:content';
 
 export interface Props {
   post: CollectionEntry<'posts'>;
+  variant?: 'default' | 'featured';
 }
 
-const { post } = Astro.props;
+const { post, variant = 'default' } = Astro.props;
 const { data, id: slug } = post;
 
 function formatDate(date: Date): string {
@@ -16,19 +17,102 @@ function formatDate(date: Date): string {
 }
 ---
 
-<article class="post-card">
-  <h2>
-    <a href={`/posts/${slug}/`}>{data.title}</a>
-  </h2>
-  <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
-
-  {data.category && <span class="category">{data.category}</span>}
-
-  {data.summary && <p class="summary">{data.summary}</p>}
-
-  {data.tags && data.tags.length > 0 && (
-    <ul class="tags">
-      {data.tags.map((tag) => <li class="tag">{tag}</li>)}
-    </ul>
-  )}
+<article class={`card card--media ${variant === 'featured' ? 'card--feature' : ''}`}>
+  <a href={`/posts/${slug}/`} class="card-link">
+    {variant === 'featured' && (
+      <div class="card-media">
+        <div class="card-image-placeholder"></div>
+      </div>
+    )}
+    <div class="card-body">
+      <div class="card-meta">
+        {data.category && <span class="badge">{data.category}</span>}
+        <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
+      </div>
+      <h3 class="card-title">{data.title}</h3>
+      {data.summary && <p class="card-summary">{data.summary}</p>}
+      <div class="card-footer">
+        <span class="card-read-time">{Math.ceil((data.summary?.length ?? 100) / 200) || 1} 分钟阅读</span>
+      </div>
+    </div>
+  </a>
 </article>
+
+<style>
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .card-link:hover {
+    text-decoration: none;
+  }
+
+  .card-media {
+    aspect-ratio: 40 / 21;
+    overflow: hidden;
+    position: relative;
+    background: var(--color-card-03);
+  }
+
+  .card-image-placeholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-g1-5);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-g0-75);
+    margin-bottom: var(--spacing-g1);
+    font-size: 0.75rem;
+    color: var(--color-text-sec);
+  }
+
+  .card-meta time {
+    color: var(--color-text-tertiary);
+  }
+
+  .card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    margin-bottom: var(--spacing-g0-75);
+    color: var(--color-fg);
+    transition: color var(--duration) var(--ease-out);
+  }
+
+  .card-link:hover .card-title {
+    color: var(--color-accent);
+  }
+
+  .card-summary {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text-sec);
+    flex: 1;
+  }
+
+  .card-footer {
+    margin-top: var(--spacing-g1);
+    padding-top: var(--spacing-g0-75);
+    border-top: 1px solid var(--color-border-02);
+  }
+
+  .card-read-time {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+  }
+</style>

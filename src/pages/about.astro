@@ -3,32 +3,15 @@ import BaseLayout from '../components/layout/BaseLayout.astro';
 ---
 
 <BaseLayout title="关于 — Ring">
-  <article class="about">
-    <h1>关于</h1>
-    <p>
-      Ring 是一个极简的个人博客，记录成长轨迹与思考碎片。
-    </p>
-    <p>
-      使用 <a href="https://astro.build">Astro</a> 构建，纯静态内容驱动。
-    </p>
+  <article class="post" style={{ maxWidth: 'var(--max-w-content)', marginInline: 'auto', paddingBlock: 'var(--spacing-v2)' }}>
+    <h1 class="post-title">关于</h1>
+    <div class="prose">
+      <p>
+        Ring 是一个极简的个人博客，记录成长轨迹与思考碎片。
+      </p>
+      <p>
+        使用 <a href="https://astro.build">Astro</a> 构建，纯静态内容驱动。
+      </p>
+    </div>
   </article>
 </BaseLayout>
-
-<style is:global>
-  .about {
-    max-width: var(--max-w);
-    margin: 2rem auto;
-    line-height: 1.8;
-  }
-  .about h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-  .about p {
-    margin: 1rem 0;
-  }
-  .about a {
-    color: var(--accent);
-  }
-</style>

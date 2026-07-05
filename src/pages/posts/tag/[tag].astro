@@ -25,14 +25,23 @@ const posts = (await getCollection('posts'))
 ---
 
 <BaseLayout title={`#${tag} — Ring`}>
-  <h1>标签：{tag}</h1>
+  <h1 class="page-title">标签：{tag}</h1>
   <p class="taxonomy-count">共 {posts.length} 篇文章</p>
-  {posts.map((post) => <PostCard post={post} />)}
+  <div class="post-list">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
 </BaseLayout>
 
 <style is:global>
+  .page-title {
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-g1-5);
+  }
   .taxonomy-count {
-    color: var(--muted);
-    margin-bottom: 1.5rem;
+    color: var(--color-text-sec);
+    margin-bottom: var(--spacing-g1-5);
   }
 </style>

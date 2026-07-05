@@ -9,32 +9,36 @@ const tags = await getTags();
 ---
 
 <BaseLayout title="归档 — Ring">
-  <h1>归档</h1>
+  <h1 class="page-title">归档</h1>
 
-  <section class="taxonomies">
-    {categories.size > 0 && (
-      <div class="taxonomy-group">
-        <h2>分类</h2>
-        <div class="taxonomy-list">
-          {Array.from(categories.entries()).map(([cat, count]) => (
-            <a href={`/posts/category/${cat}/`} class="taxonomy-item">
-              {cat} <span class="count">{count}</span>
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
+  <section class="section">
+    {(categories.size > 0 || tags.size > 0) && (
+      <div class="taxonomies">
+        {categories.size > 0 && (
+          <div class="taxonomy-group">
+            <h2>分类</h2>
+            <div class="taxonomy-list">
+              {Array.from(categories.entries()).map(([cat, count]) => (
+                <a href={`/posts/category/${cat}/`} class="taxonomy-item">
+                  {cat} <span class="count">{count}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
-    {tags.size > 0 && (
-      <div class="taxonomy-group">
-        <h2>标签</h2>
-        <div class="taxonomy-list">
-          {Array.from(tags.entries()).map(([tag, count]) => (
-            <a href={`/posts/tag/${tag}/`} class="taxonomy-item">
-              {tag} <span class="count">{count}</span>
-            </a>
-          ))}
-        </div>
+        {tags.size > 0 && (
+          <div class="taxonomy-group">
+            <h2>标签</h2>
+            <div class="taxonomy-list">
+              {Array.from(tags.entries()).map(([tag, count]) => (
+                <a href={`/posts/tag/${tag}/`} class="taxonomy-item">
+                  {tag} <span class="count">{count}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     )}
   </section>
@@ -43,37 +47,11 @@ const tags = await getTags();
 </BaseLayout>
 
 <style is:global>
-  .taxonomies {
-    margin: 1.5rem 0;
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-  .taxonomy-group h2 {
-    font-size: 1rem;
+  .page-title {
+    font-size: 2.25rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  .taxonomy-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-  .taxonomy-item {
-    font-size: 0.9rem;
-    background: var(--card-bg);
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    color: var(--fg);
-    text-decoration: none;
-  }
-  .taxonomy-item:hover {
-    background: var(--accent-dim);
-    color: var(--accent);
-  }
-  .taxonomy-item .count {
-    font-size: 0.8rem;
-    color: var(--muted);
-    margin-left: 0.2rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-v1);
   }
 </style>
