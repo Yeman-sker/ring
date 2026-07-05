@@ -15,11 +15,14 @@ const cal = buildCalendar(year, postDates);
   <p class="calendar-total">共 {cal.totalPosts} 篇文章</p>
 
   <div class="calendar">
-    <div class="calendar-months">
+    <div
+      class="calendar-months"
+      style={{ gridTemplateColumns: `repeat(${cal.weeks.length}, 12px)` }}
+    >
       {cal.months.map((m) => (
         <span
           class="calendar-month-label"
-          style={{ gridColumn: `${m.startWeek + 2} / span 1` }}
+          style={{ gridColumn: `${m.startWeek + 1} / span 1` }}
         >{m.label}</span>
       ))}
     </div>
@@ -54,7 +57,7 @@ const cal = buildCalendar(year, postDates);
   }
   .calendar-months {
     display: grid;
-    grid-template-columns: repeat(54, 14px);
+    column-gap: 2px;
     font-size: 0.75rem;
     color: var(--muted);
     margin-bottom: 0.25rem;
