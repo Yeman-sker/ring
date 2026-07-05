@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../components/layout/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import Calendar from '../components/Calendar.astro';
+import { getPublishedPosts } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+const postDates = posts.map((p) => p.data.date);
+const recentPosts = posts.slice(0, 10);
+---
+
+<BaseLayout title="Ring" description="极简个人博客">
+  <section class="hero">
+    <h1>Ring</h1>
+    <p class="subtitle">记录成长轨迹</p>
+  </section>
+
+  <Calendar postDates={postDates} />
+
+  <section class="post-list">
+    <h2>最新文章</h2>
+    {recentPosts.length > 0 ? (
+      recentPosts.map((post) => <PostCard post={post} />)
+    ) : (
+      <p class="empty">还没有文章，敬请期待。</p>
+    )}
+  </section>
+</BaseLayout>
+
+<style is:global>
+  .hero {
+    padding: 3rem 0 1rem;
+  }
+  .hero h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+  }
+  .subtitle {
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+  .post-list {
+    margin-top: 2rem;
+  }
+  .post-list h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+  }
+  .empty {
+    color: var(--muted);
+    padding: 2rem 0;
+  }
+</style>

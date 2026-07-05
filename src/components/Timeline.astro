@@ -1,0 +1,77 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  groups: Map<string, CollectionEntry<'posts'>[]>;
+}
+
+const { groups } = Astro.props;
+
+function formatDate(date: Date): string {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${m}-${d}`;
+}
+---
+
+<aside class="timeline">
+  <h2>时间线</h2>
+
+  {Array.from(groups.entries()).map(([month, posts]) => (
+    <section class="timeline-group">
+      <h3 class="timeline-month">{month}</h3>
+      <ul class="timeline-list">
+        {posts.map((post) => (
+          <li class="timeline-item">
+            <time datetime={post.data.date.toISOString()}>
+              {formatDate(post.data.date)}
+            </time>
+            <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+            {post.data.category && (
+              <span class="timeline-category">{post.data.category}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</aside>
+
+<style is:global>
+  .timeline {
+    margin: 2rem 0;
+  }
+  .timeline-group {
+    margin-bottom: 1.5rem;
+  }
+  .timeline-month {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .timeline-list {
+    list-style: none;
+  }
+  .timeline-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.25rem 0;
+    font-size: 0.95rem;
+  }
+  .timeline-item time {
+    color: var(--muted);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    min-width: 3em;
+  }
+  .timeline-category {
+    font-size: 0.8rem;
+    color: var(--muted);
+    background: var(--card-bg);
+    padding: 0 0.35rem;
+    border-radius: 3px;
+  }
+</style>

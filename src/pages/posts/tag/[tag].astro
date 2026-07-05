@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../components/layout/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const tags = new Set(
+    posts.flatMap((p) => (p.data.draft ? [] : p.data.tags ?? []))
+  );
+  return Array.from(tags).map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+type Props = {
+  tag: string;
+};
+
+const { tag } = Astro.props;
+const posts = (await getCollection('posts'))
+  .filter((p) => !p.data.draft && p.data.tags?.includes(tag))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout title={`#${tag} — Ring`}>
+  <h1>标签：{tag}</h1>
+  <p class="taxonomy-count">共 {posts.length} 篇文章</p>
+  {posts.map((post) => <PostCard post={post} />)}
+</BaseLayout>
+
+<style is:global>
+  .taxonomy-count {
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+</style>

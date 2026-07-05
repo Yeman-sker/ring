@@ -1,0 +1,34 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { data, id: slug } = post;
+
+function formatDate(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+---
+
+<article class="post-card">
+  <h2>
+    <a href={`/posts/${slug}/`}>{data.title}</a>
+  </h2>
+  <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
+
+  {data.category && <span class="category">{data.category}</span>}
+
+  {data.summary && <p class="summary">{data.summary}</p>}
+
+  {data.tags && data.tags.length > 0 && (
+    <ul class="tags">
+      {data.tags.map((tag) => <li class="tag">{tag}</li>)}
+    </ul>
+  )}
+</article>

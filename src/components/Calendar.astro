@@ -1,0 +1,86 @@
+---
+import { buildCalendar } from '../lib/calendar';
+
+export interface Props {
+  year?: number;
+  postDates: Date[];
+}
+
+const { year = new Date().getFullYear(), postDates } = Astro.props;
+const cal = buildCalendar(year, postDates);
+---
+
+<section class="calendar-section">
+  <h3>写作日历 {cal.year}</h3>
+  <p class="calendar-total">共 {cal.totalPosts} 篇文章</p>
+
+  <div class="calendar">
+    <div class="calendar-months">
+      {cal.months.map((m) => (
+        <span
+          class="calendar-month-label"
+          style={{ gridColumn: `${m.startWeek + 2} / span 1` }}
+        >{m.label}</span>
+      ))}
+    </div>
+
+    <div class="calendar-grid">
+      {cal.weeks.map((week) => (
+        <div class="calendar-week">
+          {week.days.map((day) =>
+            day ? (
+              <span
+                class={`calendar-cell level-${day.level}`}
+                title={`${day.date}: ${day.count} 篇`}
+              ></span>
+            ) : (
+              <span class="calendar-cell empty"></span>
+            )
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .calendar-section {
+    margin: 2rem 0;
+  }
+  .calendar-total {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .calendar-months {
+    display: grid;
+    grid-template-columns: repeat(54, 14px);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+    padding-left: 0;
+  }
+  .calendar-grid {
+    display: flex;
+    gap: 2px;
+  }
+  .calendar-week {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .calendar-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--calendar-cell);
+    opacity: 0.3;
+  }
+  .calendar-cell.empty {
+    background: transparent;
+  }
+  .calendar-cell.level-1 { opacity: 0.4; }
+  .calendar-cell.level-2 { opacity: 0.6; }
+  .calendar-cell.level-3 { opacity: 0.8; }
+  .calendar-cell.level-4 { opacity: 1; background: var(--calendar-active); }
+</style>
