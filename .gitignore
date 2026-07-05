@@ -1,6 +1,7 @@
 # build output
 dist/
-.vercel/
+# vercel project link
+!.vercel/project.json
 
 # deps
 node_modules/
